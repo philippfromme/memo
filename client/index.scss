@@ -1,0 +1,190 @@
+@use '@carbon/react';
+@use '@carbon/layout/scss/generated/spacing';
+
+body {
+  background-color: #161616;
+  height: 100%;
+  margin: 0px;
+}
+
+#app {
+  margin-top: spacing.$spacing-09;
+  padding-top: spacing.$spacing-05;
+  padding-bottom: spacing.$spacing-11;
+  width: 100%;
+  height: calc(100% - spacing.$spacing-09);
+  overflow-y: auto;
+  position: fixed;
+}
+
+::backdrop {
+  background-color: #161616;
+}
+
+.cds--popover {
+  display: none !important;
+}
+
+.decks__list-deck {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &.decks__list-deck--due {
+    background-color: #da1e28;
+  
+    &:hover {
+      background-color: #b81922;
+    }
+  }
+
+  .decks__list-deck-cards-count {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    svg {
+      margin-left: spacing.$spacing-03;
+      margin-top: 1px;
+    }
+  }
+}
+
+.page__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .cds--popover-container {
+    display: inline;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  cursor: pointer;
+
+  h1 {
+    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+  
+  .card__description {
+    margin-top: spacing.$spacing-05;
+  }
+}
+
+.card__front {
+}
+
+.card__back {
+}
+
+.card__back-play-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.full-width-buttons {
+  .full-width-buttons__button {
+    align-items: center;
+    flex-grow: 1;
+    justify-content: space-between;
+    padding-right: spacing.$spacing-05;
+    width: auto;
+
+    .deck__practice-button-number {
+      align-items: center;
+      display: inline-flex;
+      flex-direction: row;
+      margin-left: spacing.$spacing-03;
+    }
+
+    svg {
+      margin-left: spacing.$spacing-03;
+    }
+  }
+}
+
+.no-pointer-events {
+  pointer-events: none;
+}
+
+h1 {
+  line-height: 1.5;
+}
+
+.error{
+  background-color: #da1e28;
+
+  .error__icon {
+    margin-right: spacing.$spacing-05;
+  }
+}
+
+.card-sm {
+  cursor: pointer;
+
+  .card-sm__front,
+  .card-sm__back {
+    text-align: center;
+  }
+}
+
+html,
+#app {
+  scrollbar-color: #262626 #161616;
+}
+
+html,
+#app::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html,
+#app::-webkit-scrollbar-thumb {
+  background: #262626;
+}
+
+html,
+#app::-webkit-scrollbar-track {
+  background: #161616;
+}
+
+@media (min-width: 82rem) {
+  .hide-at-lg {
+    display: none;
+  }
+}
+
+@media (max-width: 82rem) {
+  .show-at-lg {
+    display: none;
+  }
+}
+
+@media (min-width: 42rem) {
+  .show-at-sm {
+    display: none;
+  }
+}
+
+@media (max-width: 42rem) {
+  .hide-at-sm {
+    display: none;
+  }
+}
+
+@media (max-width: 42rem) {
+  .cds--table-toolbar {
+    display: none;
+  }
+}
