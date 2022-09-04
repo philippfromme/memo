@@ -65,6 +65,7 @@ export default function CreateCard() {
     let options = {
       front,
       back,
+      description,
       tags,
       paused,
     };
