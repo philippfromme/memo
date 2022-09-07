@@ -57,13 +57,16 @@ class Database {
   }
 
   updateCard(cardId, options) {
+    options = { ...omit(options, "_id"), modified: toUTCDate() };
+
+    if ("dueDate" in options) {
+      options = { ...options, dueDate: toUTCDate(options.dueDate) };
+    }
+
     return this._client
       .db(dbName)
       .collection("cards")
-      .updateOne(
-        { _id: ObjectId(cardId) },
-        { $set: { ...omit(options, "_id"), modified: toUTCDate() } }
-      );
+      .updateOne({ _id: ObjectId(cardId) }, { $set: options });
   }
 
   updateCards(cards) {
@@ -72,11 +75,17 @@ class Database {
       .collection("cards")
       .bulkWrite(
         Object.entries(cards).map(([cardId, options]) => {
+          options = { ...omit(options, "_id"), modified: toUTCDate() };
+
+          if ("dueDate" in options) {
+            options = { ...options, dueDate: toUTCDate(options.dueDate) };
+          }
+
           return {
             updateOne: {
               filter: { _id: ObjectId(cardId) },
               update: {
-                $set: { ...omit(options, "_id"), modified: toUTCDate() },
+                $set: options,
               },
             },
           };

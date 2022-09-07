@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 import relativeTime from "dayjs/plugin/relativeTime";
 
-import { toUTCDate } from "./date";
+import { toISOString } from "./date";
 
 dayjs.extend(relativeTime);
 
@@ -31,7 +31,7 @@ function updateSpacedRepetition(level = 0, answer) {
   if (answer === ANSWERS.NO) {
     return {
       level: 0,
-      dueDate: toUTCDate(dayjs().add(...intervals[0])),
+      dueDate: toISOString(dayjs().add(...intervals[0])),
     };
   }
 
@@ -39,7 +39,7 @@ function updateSpacedRepetition(level = 0, answer) {
 
   return {
     level: newLevel,
-    dueDate: toUTCDate(dayjs().add(...intervals[newLevel])),
+    dueDate: toISOString(dayjs().add(...intervals[newLevel])),
   };
 }
 
