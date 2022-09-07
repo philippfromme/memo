@@ -61,29 +61,49 @@ body {
   }
 }
 
-.card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.card-container {
+  perspective: 2000px;
   min-height: 40vh;
-  cursor: pointer;
 
-  h1 {
-    overflow-wrap: break-word;
-    overflow-wrap: anywhere;
-    text-align: center;
+  &.card-container--revealed .card-container__inner {
+    transform: rotateX(180deg);
+    transition: transform 0.35s;
   }
-  
-  .card__description {
-    margin-top: spacing.$spacing-05;
+
+  .card-container__inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    transition: transform 0.35s;
+    transform-style: preserve-3d;
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      backface-visibility: hidden;
+
+      &.card__back {
+        transform: rotateX(180deg);
+      }
+    
+      h1 {
+        overflow-wrap: break-word;
+        overflow-wrap: anywhere;
+        text-align: center;
+      }
+      
+      .card__description {
+        margin-top: spacing.$spacing-05;
+      }
+    }
   }
-}
-
-.card__front {
-}
-
-.card__back {
 }
 
 .card__back-play-button {

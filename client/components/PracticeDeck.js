@@ -102,7 +102,9 @@ export default function PracticeDeck() {
           onClick={onClose}
         ></Button>
       </div>
-      {<Card card={spacedRepetition.getCard()} onAnswer={onAnswer} />}
+      {spacedRepetition?.getCard() ? (
+        <Card card={spacedRepetition.getCard()} onAnswer={onAnswer} />
+      ) : null}
     </Stack>
   );
 }
