@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button, Loading, Stack, Tile } from "carbon-components-react";
 
 import { Close } from "@carbon/icons-react";
+
+import { debounce } from "lodash";
 
 import dayjs from "dayjs";
 
@@ -36,11 +38,15 @@ export default function PracticeDeck() {
   const error = cardsError || deckError;
   const isFetching = isFetchingCards || isFetchingDeck;
 
+  const [cardsFetched, setCardsFetched] = useState(false);
+
   useEffect(() => {
     if (cards) {
       setSpacedRepetition(
         new SpacedRepetition(cards.filter((card) => !isPaused(card)))
       );
+
+      setCardsFetched(true);
     }
   }, [cards]);
 
@@ -51,8 +57,18 @@ export default function PracticeDeck() {
 
   const updateCards = useUpdateCards(deckId);
 
+  const updateCardsDebounced = useCallback(debounce((foo) => {
+    if (Object.keys(foo).length) {
+      updateCards(foo);
+    }
+  }, 5000), []);
+
+  useEffect(() => updateCardsDebounced(cardUpdates), [cardUpdates]);
+
   const onClose = async () => {
     setIsUpdatingCards(true);
+
+    updateCardsDebounced.cancel();
 
     if (Object.keys(cardUpdates).length) {
       await updateCards(cardUpdates);
@@ -84,7 +100,7 @@ export default function PracticeDeck() {
     );
   }
 
-  const loading = isUpdatingCards || isFetching;
+  const loading = isUpdatingCards || (isFetching && !cardsFetched);
 
   if (loading) {
     return <Loading />;
