@@ -297,159 +297,181 @@ export default function Deck() {
       </ButtonSet>
       <h2>Cards</h2>
       {cards.length ? (
-        <DataTable rows={rows} headers={headers} isSortable sortRow={sortRow}>
-          {({
-            getBatchActionProps,
-            getHeaderProps,
-            getRowProps,
-            getSelectionProps,
-            getToolbarProps,
-            headers,
-            rows,
-            selectedRows,
-          }) => {
-            const batchActionProps = getBatchActionProps();
+        <div>
+          <DataTable rows={rows} headers={headers} isSortable sortRow={sortRow}>
+            {({
+              getBatchActionProps,
+              getHeaderProps,
+              getRowProps,
+              getSelectionProps,
+              getToolbarProps,
+              headers,
+              rows,
+              selectedRows,
+            }) => {
+              const batchActionProps = getBatchActionProps();
 
-            return (
-              <TableContainer className="hide-at-sm">
-                <TableToolbar {...getToolbarProps()} aria-label="Toolbar">
-                  <TableBatchActions {...batchActionProps}>
-                    <TableBatchAction
-                      tabIndex={
-                        batchActionProps.shouldShowBatchActions ? 0 : -1
-                      }
-                      renderIcon={TrashCan}
-                      onClick={onBatchDelete(selectedRows)}
-                    >
-                      Delete
-                    </TableBatchAction>
-                    <TableBatchAction
-                      tabIndex={
-                        batchActionProps.shouldShowBatchActions ? 0 : -1
-                      }
-                      renderIcon={PauseOutline}
-                      onClick={onBatchPause(selectedRows)}
-                    >
-                      Pause Practicing
-                    </TableBatchAction>
-                    <TableBatchAction
-                      tabIndex={
-                        batchActionProps.shouldShowBatchActions ? 0 : -1
-                      }
-                      renderIcon={PlayOutline}
-                      onClick={onBatchResume(selectedRows)}
-                    >
-                      Resume Practicing
-                    </TableBatchAction>
-                  </TableBatchActions>
-                  <TableToolbarContent>
-                    <TableToolbarSearch
-                      spellCheck={false}
-                      persistent={true}
-                      onChange={onSearchInput}
-                      value={search || ""}
-                    />
-                    {false ? (
-                      <TableToolbarMenu light>
-                        <TableToolbarAction onClick={() => console.log("Foo")}>
-                          Foo
-                        </TableToolbarAction>
-                      </TableToolbarMenu>
-                    ) : null}
-                    <Button
-                      onClick={() => navigate(`/create-card?deck=${deckId}`)}
-                    >
-                      Create Card
-                    </Button>
-                  </TableToolbarContent>
-                </TableToolbar>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableSelectAll {...getSelectionProps()} />
-                      {headers.map((header) => (
-                        <TableHeader
-                          className={classNames({
-                            "show-at-lg": [
-                              "created",
-                              "dueDate",
-                              "tags",
-                            ].includes(header.key),
-                            "no-pointer-events": header.key === "tags",
-                          })}
-                          {...getHeaderProps({ header })}
-                        >
-                          {header.header}
-                        </TableHeader>
-                      ))}
-                      <TableHeader />
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => {
-                      const card = cards.find(matchesProperty("_id", row.id));
+              return (
+                <TableContainer className="hide-at-sm">
+                  <TableToolbar {...getToolbarProps()} aria-label="Toolbar">
+                    <TableBatchActions {...batchActionProps}>
+                      <TableBatchAction
+                        tabIndex={
+                          batchActionProps.shouldShowBatchActions ? 0 : -1
+                        }
+                        renderIcon={TrashCan}
+                        onClick={onBatchDelete(selectedRows)}
+                      >
+                        Delete
+                      </TableBatchAction>
+                      <TableBatchAction
+                        tabIndex={
+                          batchActionProps.shouldShowBatchActions ? 0 : -1
+                        }
+                        renderIcon={PauseOutline}
+                        onClick={onBatchPause(selectedRows)}
+                      >
+                        Pause Practicing
+                      </TableBatchAction>
+                      <TableBatchAction
+                        tabIndex={
+                          batchActionProps.shouldShowBatchActions ? 0 : -1
+                        }
+                        renderIcon={PlayOutline}
+                        onClick={onBatchResume(selectedRows)}
+                      >
+                        Resume Practicing
+                      </TableBatchAction>
+                    </TableBatchActions>
+                    <TableToolbarContent>
+                      <TableToolbarSearch
+                        spellCheck={false}
+                        persistent={true}
+                        onChange={onSearchInput}
+                        value={search || ""}
+                      />
+                      {false ? (
+                        <TableToolbarMenu light>
+                          <TableToolbarAction
+                            onClick={() => console.log("Foo")}
+                          >
+                            Foo
+                          </TableToolbarAction>
+                        </TableToolbarMenu>
+                      ) : null}
+                      <Button
+                        onClick={() => navigate(`/create-card?deck=${deckId}`)}
+                      >
+                        Create Card
+                      </Button>
+                    </TableToolbarContent>
+                  </TableToolbar>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableSelectAll {...getSelectionProps()} />
+                        {headers.map((header) => (
+                          <TableHeader
+                            className={classNames({
+                              "show-at-lg": [
+                                "created",
+                                "dueDate",
+                                "tags",
+                              ].includes(header.key),
+                              "no-pointer-events": header.key === "tags",
+                            })}
+                            {...getHeaderProps({ header })}
+                          >
+                            {header.header}
+                          </TableHeader>
+                        ))}
+                        <TableHeader />
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row) => {
+                        const card = cards.find(matchesProperty("_id", row.id));
 
-                      if (!card) {
-                        return null;
-                      }
+                        if (!card) {
+                          return null;
+                        }
 
-                      const paused = isPaused(card);
+                        const paused = isPaused(card);
 
-                      return (
-                        <TableRow {...getRowProps({ row })}>
-                          <TableSelectRow {...getSelectionProps({ row })} />
-                          {row.cells.map((cell) => {
-                            if (cell.info.header === "created") {
-                              return <CreatedCell key="created" card={card} />;
-                            } else if (cell.info.header === "dueDate") {
-                              return <DueCell key="due" card={card} />;
-                            } else if (cell.info.header === "tags") {
+                        return (
+                          <TableRow {...getRowProps({ row })}>
+                            <TableSelectRow {...getSelectionProps({ row })} />
+                            {row.cells.map((cell) => {
+                              if (cell.info.header === "created") {
+                                return (
+                                  <CreatedCell key="created" card={card} />
+                                );
+                              } else if (cell.info.header === "dueDate") {
+                                return <DueCell key="due" card={card} />;
+                              } else if (cell.info.header === "tags") {
+                                return (
+                                  <TagsCell
+                                    key="tags"
+                                    card={card}
+                                    onClickTag={(tag) =>
+                                      setSearch(`tag:${tag}`)
+                                    }
+                                  />
+                                );
+                              }
+
                               return (
-                                <TagsCell
-                                  key="tags"
-                                  card={card}
-                                  onClickTag={(tag) => setSearch(`tag:${tag}`)}
-                                />
+                                <TableCell key={cell.id}>
+                                  {cell.value}
+                                </TableCell>
                               );
-                            }
-
-                            return (
-                              <TableCell key={cell.id}>{cell.value}</TableCell>
-                            );
-                          })}
-                          <TableCell className="cds--table-column-menu">
-                            <OverflowMenu size="sm" flipped ariaLabel="">
-                              <OverflowMenuItem
-                                onClick={() => onEdit(row.id)}
-                                itemText="Edit"
-                              ></OverflowMenuItem>
-                              <OverflowMenuItem
-                                onClick={() => onDelete([row.id])}
-                                itemText="Delete"
-                              ></OverflowMenuItem>
-                              <OverflowMenuItem
-                                onClick={
-                                  paused
-                                    ? () => onResume(row.id)
-                                    : () => onPause(row.id)
-                                }
-                                itemText={
-                                  paused
-                                    ? "Resume practicing"
-                                    : "Pause practicing"
-                                }
-                              ></OverflowMenuItem>
-                            </OverflowMenu>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            );
-          }}
-        </DataTable>
+                            })}
+                            <TableCell className="cds--table-column-menu">
+                              <OverflowMenu size="sm" flipped ariaLabel="">
+                                <OverflowMenuItem
+                                  onClick={() => onEdit(row.id)}
+                                  itemText="Edit"
+                                ></OverflowMenuItem>
+                                <OverflowMenuItem
+                                  onClick={() => onDelete([row.id])}
+                                  itemText="Delete"
+                                ></OverflowMenuItem>
+                                <OverflowMenuItem
+                                  onClick={
+                                    paused
+                                      ? () => onResume(row.id)
+                                      : () => onPause(row.id)
+                                  }
+                                  itemText={
+                                    paused
+                                      ? "Resume practicing"
+                                      : "Pause practicing"
+                                  }
+                                ></OverflowMenuItem>
+                              </OverflowMenu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              );
+            }}
+          </DataTable>
+          <Pagination
+            className="hide-at-sm"
+            backwardText="Previous page"
+            forwardText="Next page"
+            itemsPerPageText="Items per page:"
+            onChange={onPaginationChange}
+            page={page}
+            pageSize={pageSize}
+            pageSizes={[10, 20, 30, 40, 50]}
+            size="md"
+            totalItems={filteredCards.length}
+          />
+        </div>
       ) : (
         <Tile>
           <Stack gap={6}>
@@ -510,19 +532,20 @@ export default function Deck() {
               </Stack>
             );
           })}
+          <Pagination
+            className="show-at-sm"
+            backwardText="Previous page"
+            forwardText="Next page"
+            itemsPerPageText="Items per page:"
+            onChange={onPaginationChange}
+            page={page}
+            pageSize={pageSize}
+            pageSizes={[10, 20, 30, 40, 50]}
+            size="md"
+            totalItems={filteredCards.length}
+          />
         </>
       ) : null}
-      <Pagination
-        backwardText="Previous page"
-        forwardText="Next page"
-        itemsPerPageText="Items per page:"
-        onChange={onPaginationChange}
-        page={page}
-        pageSize={pageSize}
-        pageSizes={[10, 20, 30, 40, 50]}
-        size="md"
-        totalItems={filteredCards.length}
-      />
     </Stack>
   );
 }
