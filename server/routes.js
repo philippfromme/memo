@@ -37,6 +37,10 @@ apiRouter.get("/decks/:deckId", auth, async (req, res) => {
 
   const deck = await database.getDeck(deckId);
 
+  if (!deck) {
+    return res.status(404).send('Deck not found');
+  }
+
   res.json(deck);
 });
 
@@ -90,6 +94,10 @@ apiRouter.get("/decks/:deckId/cards/:cardId", auth, async (req, res) => {
   const { cardId } = req.params;
 
   const card = await database.getCard(cardId);
+
+  if (!card) {
+    return res.status(404).send('Card not found');
+  }
 
   res.json(card);
 });

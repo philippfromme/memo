@@ -10,7 +10,7 @@ export async function getDecks() {
     return json;
   }
 
-  throw new Error("Decks not found");
+  return Promise.reject("Decks not found");
 }
 
 /**
@@ -25,7 +25,7 @@ export async function getDeck(deckId) {
     return json;
   }
 
-  throw new Error("Deck not found");
+  return Promise.reject("Deck not found");
 }
 
 /**
@@ -50,7 +50,7 @@ export async function createDeck(options = {}) {
     return json;
   }
 
-  throw new Error("Deck not created");
+  return Promise.reject("Deck not created");
 }
 
 /**
@@ -73,7 +73,7 @@ export async function updateDeck(deckId, options = {}) {
     return true;
   }
 
-  throw new Error("Deck not updated");
+  return Promise.reject("Deck not updated");
 }
 
 /**
@@ -88,7 +88,7 @@ export async function deleteDeck(deckId) {
     return true;
   }
 
-  throw new Error("Deck not deleted");
+  return Promise.reject("Deck not deleted");
 }
 
 /**
@@ -103,7 +103,7 @@ export async function getCard(deckId, cardId) {
     return json;
   }
 
-  return null;
+  return Promise.reject("Card not found");
 }
 
 /**
@@ -118,7 +118,7 @@ export async function getCards(deckId, count = false) {
     return json;
   }
 
-  return null;
+  return Promise.reject("Cards not found");
 }
 
 /**
@@ -143,7 +143,7 @@ export async function createCard(options = {}, deckId) {
     return json;
   }
 
-  return null;
+  return Promise.reject("Card not created");
 }
 
 /**
@@ -166,7 +166,7 @@ export async function updateCard(deckId, cardId, options = {}) {
     return true;
   }
 
-  throw new Error("Card not updated");
+  return Promise.reject("Card not updated");
 }
 
 /**
@@ -189,7 +189,7 @@ export async function updateCards(deckId, options = {}) {
     return true;
   }
 
-  throw new Error("Cards not updated");
+  return Promise.reject("Cards not updated");
 }
 
 /**
@@ -204,7 +204,7 @@ export async function deleteCard(deckId, cardId) {
     return true;
   }
 
-  throw new Error("Card not deleted");
+  return Promise.reject("Card not deleted");
 }
 
 /**
@@ -222,5 +222,5 @@ export async function deleteCards(deckId, cardIds) {
     return true;
   }
 
-  throw new Error("Cards not deleted");
+  return Promise.reject("Cards not deleted");
 }

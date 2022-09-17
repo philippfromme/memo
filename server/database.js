@@ -168,6 +168,10 @@ class Database {
       .collection("decks")
       .findOne({ _id: ObjectId(deckId) });
 
+    if (!deck) {
+      return null;
+    }
+
     const cardsCount = await this._getCardsCount(deckId);
 
     return {
