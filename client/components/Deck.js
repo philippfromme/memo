@@ -157,7 +157,7 @@ export default function Deck() {
 
   const [search, setSearch] = useState(searchParams.get("search") || "");
 
-  const [filteredCards, setFilteredCards] = useState([]);
+  const [filteredCards, setFilteredCards] = useState(cards);
 
   const onSearchInput = useCallback(
     ({ target }) => {
@@ -178,13 +178,14 @@ export default function Deck() {
   useEffect(() => filterCardsOnCardsChanged(cards), [cards]);
 
   const filterCardsOnSearchChanged = useCallback(
-    debounce((search) => {
-      setFilteredCards(filterCards(cards, search));
-    }, 300),
-    [cards, setFilteredCards]
+    debounce(
+      (cards, search) => setFilteredCards(filterCards(cards, search)),
+      300
+    ),
+    [setFilteredCards]
   );
 
-  useEffect(() => filterCardsOnSearchChanged(search), [search]);
+  useEffect(() => filterCardsOnSearchChanged(cards, search), [cards, search]);
 
   useEffect(() => {
     const params = new URLSearchParams();
