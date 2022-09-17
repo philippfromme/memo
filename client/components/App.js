@@ -70,13 +70,16 @@ function HeaderGlobal() {
         <InlineLoading style={{ justifyContent: "end" }} />
       ) : null}
       <HeaderGlobalBar>
-        <HeaderGlobalAction
-          tooltipAlignment="end"
-          aria-label="Toggle Fullscreen"
-          onClick={toggleFullscreen}
-        >
-          <FitToScreen size={20} />
-        </HeaderGlobalAction>
+        <div className="header__version">v0.1.0</div>
+        {false && (
+          <HeaderGlobalAction
+            tooltipAlignment="end"
+            aria-label="Toggle Fullscreen"
+            onClick={toggleFullscreen}
+          >
+            <FitToScreen size={20} />
+          </HeaderGlobalAction>
+        )}
       </HeaderGlobalBar>
     </Header>
   );
