@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import {
   Button,
@@ -9,6 +9,7 @@ import {
   Loading,
   OverflowMenu,
   OverflowMenuItem,
+  Pagination,
   Search,
   Stack,
   Table,
@@ -42,7 +43,7 @@ import {
 
 import filterable from "filterable";
 
-import { matchesProperty, sortBy } from "lodash";
+import { debounce, matchesProperty } from "lodash";
 
 import classNames from "classnames";
 
@@ -86,13 +87,17 @@ const headers = [
 ];
 
 export default function Deck() {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
   const navigate = useNavigate();
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { deckId } = useParams();
 
   const {
-    cards,
+    cards = [],
     error: cardsError,
     isFetching: isFetchingCards,
   } = useCards(deckId);
@@ -152,11 +157,34 @@ export default function Deck() {
 
   const [search, setSearch] = useState(searchParams.get("search") || "");
 
-  const onSearchInput = ({ target }) => {
-    const { value: search = null } = target;
+  const [filteredCards, setFilteredCards] = useState([]);
 
-    setSearch(search);
-  };
+  const onSearchInput = useCallback(
+    ({ target }) => {
+      const { value: search = null } = target;
+
+      setSearch(search);
+    },
+    [setSearch]
+  );
+
+  const filterCardsOnCardsChanged = useCallback(
+    (cards) => {
+      setFilteredCards(filterCards(cards, search));
+    },
+    [search, setFilteredCards]
+  );
+
+  useEffect(() => filterCardsOnCardsChanged(cards), [cards]);
+
+  const filterCardsOnSearchChanged = useCallback(
+    debounce((search) => {
+      setFilteredCards(filterCards(cards, search));
+    }, 300),
+    [cards, setFilteredCards]
+  );
+
+  useEffect(() => filterCardsOnSearchChanged(search), [search]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -169,6 +197,27 @@ export default function Deck() {
 
     setSearchParams(params);
   }, [history, search]);
+
+  const onPaginationChange = ({ page: newPage, pageSize: newPageSize }) => {
+    setPage(newPage);
+    setPageSize(newPageSize);
+  };
+
+  const paginatedCards = useMemo(() => {
+    const actualPage = page - 1;
+
+    return filteredCards.slice(
+      actualPage * pageSize,
+      actualPage * pageSize + pageSize
+    );
+  }, [filteredCards, page, pageSize]);
+
+  const rows = useMemo(() => {
+    return paginatedCards.map((card) => ({
+      ...card,
+      id: card._id,
+    }));
+  }, [paginatedCards]);
 
   if (error) {
     return <Error error={error} />;
@@ -199,13 +248,6 @@ export default function Deck() {
   };
 
   const hasCardsDue = deck.cardsCount.due > 0;
-
-  const filteredCards = filterCards(cards, search);
-
-  const rows = sortBy(filteredCards, "front").map((card) => ({
-    ...card,
-    id: card._id,
-  }));
 
   return (
     <Stack gap={6} className="deck">
@@ -303,9 +345,7 @@ export default function Deck() {
                     <TableToolbarSearch
                       spellCheck={false}
                       persistent={true}
-                      onChange={(event) => {
-                        setSearch(event.target.value);
-                      }}
+                      onChange={onSearchInput}
                       value={search || ""}
                     />
                     {false ? (
@@ -431,7 +471,7 @@ export default function Deck() {
             onChange={onSearchInput}
             onKeyDown={onSearchInput}
           />
-          {filteredCards.map((card) => {
+          {paginatedCards.map((card) => {
             return (
               <Stack
                 key={card._id}
@@ -440,7 +480,7 @@ export default function Deck() {
                 className="card-sm show-at-sm"
               >
                 <Tile className="card-sm__front">
-                  <h5>{card.front}</h5> 
+                  <h5>{card.front}</h5>
                 </Tile>
                 <Tile className="card-sm__back">
                   <h5>{card.back}</h5>
@@ -471,6 +511,17 @@ export default function Deck() {
           })}
         </>
       ) : null}
+      <Pagination
+        backwardText="Previous page"
+        forwardText="Next page"
+        itemsPerPageText="Items per page:"
+        onChange={onPaginationChange}
+        page={page}
+        pageSize={pageSize}
+        pageSizes={[10, 20, 30, 40, 50]}
+        size="md"
+        totalItems={filteredCards.length}
+      />
     </Stack>
   );
 }

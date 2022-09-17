@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { sortBy } from "lodash";
+
 import { getCards } from "../api";
 
 import { defaultOptions } from "./options";
@@ -12,7 +14,11 @@ export default function useDeck(deckId) {
     isFetching,
   } = useQuery(
     ["decks", deckId, "cards"],
-    () => getCards(deckId),
+    async () => {
+      const cards = await getCards(deckId);
+
+      return sortBy(cards, "front");
+    },
     defaultOptions
   );
 
