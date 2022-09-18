@@ -1,6 +1,6 @@
 {
   "name": "memo",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Flashcards app with spaced repetition",
   "main": "index.js",
   "scripts": {
