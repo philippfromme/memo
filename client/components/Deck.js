@@ -414,7 +414,7 @@ export default function Deck() {
                                     key="tags"
                                     card={card}
                                     onClickTag={(tag) =>
-                                      setSearch(`tag:${tag}`)
+                                      setSearch(`tag:"${tag}"`)
                                     }
                                   />
                                 );
@@ -517,7 +517,7 @@ export default function Deck() {
                           onClick={(event) => {
                             event.stopPropagation();
 
-                            setSearch(`tag:${tag}`);
+                            setSearch(`tag:"${tag}"`);
                           }}
                           style={{ border: "none", lineHeight: 1 }}
                           size="md"
