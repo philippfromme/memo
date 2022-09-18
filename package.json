@@ -1,6 +1,6 @@
 {
   "name": "memo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Flashcards app with spaced repetition",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,10 @@
     "start:server": "nodemon server/index.js",
     "start:client": "webpack watch --mode=development --node-env development"
   },
-  "keywords": ["flashcards", "spaced repetition"],
+  "keywords": [
+    "flashcards",
+    "spaced repetition"
+  ],
   "author": "Philipp Fromme",
   "license": "MIT",
   "dependencies": {
