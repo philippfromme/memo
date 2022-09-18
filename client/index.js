@@ -1,6 +1,6 @@
 import React from "react";
 
-import { createRoot } from "react-dom/client";
+import { render } from "react-dom";
 
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 
@@ -19,9 +19,7 @@ import "./index.scss";
 
 const container = document.getElementById("app");
 
-const root = createRoot(container);
-
-root.render(
+render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
@@ -44,7 +42,8 @@ root.render(
         <Route path="*" element={<Empty />} />
       </Route>
     </Routes>
-  </BrowserRouter>
+  </BrowserRouter>,
+  container
 );
 
 function Empty() {
