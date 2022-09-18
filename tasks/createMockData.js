@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const dayjs = require("dayjs");
 
-const { random } = require("lodash");
+const { random, shuffle } = require("lodash");
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
@@ -59,8 +59,10 @@ const factory = require("../server/factory");
 })();
 
 function getRandomTags() {
-  const start = random(1),
-        end = random(start, 2);
+  const tags = shuffle([ 'foo', 'bar', 'baz', 'foo bar' ]);
 
-  return [ 'foo', 'bar', 'baz' ].slice(start, end);
+  const start = 0,
+        end = random(start, tags.length - 1);
+
+  return tags.slice(start, end);
 }
