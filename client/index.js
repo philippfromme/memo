@@ -59,3 +59,5 @@ function Empty() {
     </Tile>
   );
 }
+
+console.log(`Memo v${process.env.APP_VERSION}`);

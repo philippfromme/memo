@@ -2,6 +2,8 @@ const path = require("path");
 
 const { DefinePlugin } = require("webpack");
 
+const pkg = require("./package.json");
+
 module.exports = {
   entry: path.resolve(__dirname, "./client/index.js"),
   module: {
@@ -24,6 +26,7 @@ module.exports = {
   plugins: [
     new DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "process.env.APP_VERSION": JSON.stringify(pkg.version),
     }),
   ],
   devtool: "eval-source-map",

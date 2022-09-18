@@ -70,7 +70,7 @@ function HeaderGlobal() {
         <InlineLoading style={{ justifyContent: "end" }} />
       ) : null}
       <HeaderGlobalBar>
-        <div className="header__version">v0.1.0</div>
+        <div className="header__version">v{process.env.APP_VERSION}</div>
         {false && (
           <HeaderGlobalAction
             tooltipAlignment="end"
